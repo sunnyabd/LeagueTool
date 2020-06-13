@@ -2,13 +2,34 @@
 ; #Warn  ; Enable warnings to assist with detecting common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
+#include Class_CtlColors.ahk
+#singleinstance force
+;Todo
+; adjust based on screen size
+; Variable Image Size
+; Timer function for farmville
+; Item Desc on syntable
+; Currency equiv
 
+; fix splash always on top (Problem lies with Vulkan engine) (might be fixed?)
+
+; Done
+; Design and finish the splash...
+; Fix bug where u can minimize and reopen LTSettings
 ;##############################################################################
 ; Init
 ;##############################################################################
 tog := 0
+sectionSyndicate := "Members"
+sectionHotkeys := "Hotkeys"
+
+; Load Settings
 user_settings_path := A_ScriptDir . "/user_settings.ini"
-MemDict := LoadSettings(user_settings_path, "Members")
+MemDict := LoadSection(user_settings_path, sectionSyndicate)
+hotkeyDict := LoadSection(user_settings_path, sectionHotkeys)
+
+;Load Hotkeys
+gosub, loadHotkeys
 
 #Persistent
 ImageOn := 0
@@ -17,40 +38,106 @@ Menu, Tray, Add, Settings, LTSettings ;Creates settings tab in tray icon menu
 return
 
 ;##############################################################################
-; Main Code
+; Subs
 ;##############################################################################
 
-^j::
+loadHotkeys:
+hotkeySettings := hotkeyDict["Settings"]
+hotkeySyndicateTable := hotkeyDict["SyndicateTable"]
+hotkey, %hotkeySettings%, LTSettings, 
+hotkey, %hotkeySyndicateTable%, toggleSynSub, Toggle
+return
+
+toggleSynSub:
 tog := toggleSyn(memDict, tog)
 return
 
-
-
-^q::
-ExitApp
-
-;##############################################################################
-; GoSubs
-;##############################################################################
-
 LTSettings:
-GoSub, SetButtons
-Gui, +AlwaysOnTop
-Gui, Color, EEAA99
-Gui, Add, Picture, x112 y39 w690 h290 , %A_ScriptDir%\syndicate.jpg
-Gui, Add, Text, x142 y379 w200 h30 , test
-Gui, Add, Button, x672 y489 w90 h30 gSubmit, Button
-Gui, Add, Radio, x132 y119 w120 h30 +Center Checked%Aisling1% Group vAis , Cat
-Gui, Add, Radio, x132 y179 w40 h30 Checked%Aisling2% , 2
-Gui, Add, Radio, x132 y239 w40 h30 Checked%Aisling3% , 3
-Gui, Add, Radio, x132 y299 w40 h30 Checked%Aisling4% , 4
-Gui, Add, Radio, x172 y119 w40 h30 Checked%Cameria1% Group vCam, 1
-Gui, Add, Radio, x172 y179 w40 h30 Checked%Cameria2% , 2
-Gui, Add, Radio, x172 y239 w40 h30 Checked%Cameria3% , 3
-Gui, Add, Radio, x172 y299 w40 h30 Checked%Cameria4% , 4
-		; Generated using SmartGUI Creator 4.0
-Gui, Show, x442 y225 h627 w929, New GUI Window
+; Dimensional constants
+xRadioOrigin := 80
+yRadioOrigin := 175
+columnWidth := 80
+rowHeight := 100
+radioWidth := 15
+radioHeight := 15
+clearWidth := 70
+clearHeight := 30
+clearY := 500
+xHotkeysOrigin := xRadioOrigin
+yHotkeysOrigin := yRadioOrigin+(4*rowHeight)
+xHotkeysOffset := 100
+yHotkeysOffset := 25
+hotkeyTextWidth := 95
+hotkeyTextHeight := 20
+; Naming constants
+radioHwnd = RB
+; Color constants
+lightGrey := "4B4B4B"
+darkGrey := "424242"
+
+; Initialize GUI
+Gui, LTSettingsName:New
+Gui, Add, Picture, x-8 y-1 w1440 h600 , E:\GitHub\LeagueTool\SyndicateTable1.png
+
+rcounter := 1
+ccounter := 1
+for x, y in MemDict{
+	Loop, 5{
+		px := xRadioOrigin + ((ccounter-1)*columnWidth)
+		py := yRadioOrigin + ((rcounter-1)*rowHeight)
+		if(rcounter = y){
+			checker := 1
+		}else{
+			checker := 0
+		}
+		
+		; Generates radio buttons with conditions for:
+		; 1) First button in Group
+		; 2) rest of Group
+		; 3) clear button
+		if(rcounter = 1){
+			Gui, Add, Radio, x%px% y%py% w%radioWidth% h%radioHeight% hwnd%radioHwnd% Checked%checker% Group v%x%,
+		}else if(rcounter<5){
+			Gui, Add, Radio, x%px% y%py% w%radioWidth% h%radioHeight% hwnd%radioHwnd% Checked%checker%,
+		}else{
+			px := px - 1 ;to align with above radios due to width difference
+			Gui, Add, Radio, x%px% y%clearY% w%clearWidth% h%clearHeight% hwnd%radioHwnd% +Centred Checked%checker%, Clear
+			clearColor := "White"
+		}
+		
+		if(rcounter=5){
+			CtlColors.Attach(%radioHwnd%, darkGrey, clearColor)
+		}else if(Mod((rcounter+ccounter),2)=0){
+			CtlColors.Attach(%radioHwnd%, darkGrey, clearColor)
+		}else{
+			CtlColors.Attach(%radioHwnd%, lightGrey, clearColor)
+		}
+		
+		clearColor := ""
+		rcounter := rcounter + 1
+	}
+	
+	rcounter := 1
+	ccounter := ccounter + 1
+}
+MsgBox 2
+
+rcounter := 1
+for x, y in hotkeyDict{
+	MsgBox 1
+	px := xHotkeysOrigin + xHotkeysOffset
+	py := yHotkeysOrigin + (rcounter - 1)*yHotkeysOffset
+	Gui, Add, Text, x%xHotkeysOrigin% y%py% w%hotkeyTextWidth% h%hotkeyTextWidth% hwndhotkeyText Right, %x% : 
+	Gui, Add, Hotkey, x%px% y%py% v%x%, %y%
+	CtlColors.Attach(hotkeyText, darkGrey, "White")
+	rcounter := rcounter + 1
+}
+;Gui, Add, Hotkey, x%columnWidth% y570 h15 w135 vsyndicateHotkey
+;Gui, Add, Hotkey, x%columnWidth% x+10 y570 h15 w135 vsettingsHotkey
+Gui, Add, Button, x1312 y549 w100 h30 gSubmit, Button
+Gui, Show, x265 y170 h702 w1534, Settings
 return
+
 
 GuiClose:
 Gui, Destroy
@@ -59,24 +146,19 @@ return
 
 Submit:
 Gui, Submit, NoHide
-memArr := [Ais, Cam]
-MemDict := PairMembers(MemDict, memArr)
-SaveSettings(user_settings_path, memDict, "Members")
+for x, y in memDict{
+	memDict[x] := %x%
+}
+for x, y in hotkeyDict{
+	hotkeyDict[x] := %x%
+}
+
+SaveSettings(user_settings_path, memDict, sectionSyndicate)
+SaveSettings(user_settings_path, hotkeyDict, sectionHotkeys)
 toggleSyn(memDict, 1)
 tog := 0
 return
 
-SetButtons:
-for x, y in memDict{
-	%x%1 := 0
-	%x%2 := 0
-	%x%3 := 0
-	%x%4 := 0
-	{
-		%x%%y% := 1
-	}
-}
-return
 
 ;##############################################################################
 ; Functions
@@ -86,40 +168,46 @@ toggleSyn(memDict, tog)
 {	
 	;Constants
 	splashStatus := [0,0,0,0]
+	imgWidth := 71
+	imgHeight := 89
+	xOrigin := 0
+	yOrigin := 270
+	numStates := 5
 	if(tog=0){
+		Gui, Synoverlay:New
+		Gui, Color, EEAA99
 		For x, y in memDict{
-			if(memDict[x] != 0){
+			if(0 < y and y < numStates){
 				total := splashStatus[1]+splashStatus[2]+splashStatus[3]+splashStatus[4]+1
-				xpos := 60*splashStatus[y]
-				ypos := 270+((y-1)*75)
-				SplashImage , %total%:%A_ScriptDir%/%x%.png, B X%xpos% Y%ypos%
+				xpos := imgWidth*splashStatus[y]
+				ypos := ((y-1)*imgHeight)
+				Gui, Add, Picture, X%xpos% Y%ypos%, %A_ScriptDir%/Members/%x%.jpg
 				splashStatus[y] := splashStatus[y] + 1
 			}
 		}
+		Gui, -Caption +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs -Sysmenu
+		Gui, Show, x%xOrigin% y%yOrigin% h600 w1000
+		WinSet, TransColor, EEAA99 255
 		tog := 1
 	}else{
-		counter := 1
-		Loop, 10{
-			SplashImage , %counter%: Off
-			counter := counter +1 
-		}
+		Gui, Synoverlay:Destroy
 		tog := 0
 	}
 	return tog
 }
 
-LoadSettings(path, sect)
+LoadSection(path, sect)
 {
 	; Initialize user_settings
 	IniRead, sOutput, %path%, %sect%
-	Member_Settings := Object()
-	memSection := StrSplit(sOutput, "`n")
-	For x, y in memSection
+	Settings := Object()
+	settingRows := StrSplit(sOutput, "`n")
+	For x, y in settingRows
 	{
 		temp := StrSplit(y, "=")
-		Member_Settings[temp[1]] := temp[2]
+		Settings[temp[1]] := temp[2]
 	}
-	return Member_Settings
+	return Settings
 }
 
 
@@ -143,4 +231,3 @@ PairMembers(mem, arr)
 	}
 	return mem
 }
-
