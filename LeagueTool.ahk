@@ -269,8 +269,8 @@ toggleSyn(memDict, tog)
 	xOrigin := 0
 	yOrigin := 330
 	numStates := 5
-	if(tog=0){
-		WinGet, windowName, ID, Path of Exile
+	WinGet, windowName, ID, Path of Exile
+	if((tog=0) and windowName){
 		Gui, Synoverlay:New
 		For x, y in memDict{
 			if(0 < y and y < numStates){
@@ -309,8 +309,9 @@ toggleCur(dict, tog){
 	
 	exSell := dict["exSell"]
 	exBuy := dict["exBuy"]
-	if (tog = 0){
-		WinGet, windowName, ID, Path of Exile
+	WinGet, windowName, ID, Path of Exile
+	if ((tog = 0) and windowName){
+		
 		Gui, Currency:New
 		Gui, Color, 424242
 		Gui, Add, Picture, x0 y0 w220 h120 , %imageDir%\Currency.png
