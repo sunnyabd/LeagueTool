@@ -5,22 +5,7 @@ SetWorkingDir %A_ScriptDir%
 #include scripts\JSON.ahk
 #include scripts\Jxon.ahk
 #singleinstance, Force
-;Todo
-; remember to set to correct date update code
 
-; updating function
-; add internet connection
-; adjust based on screen size
-; Variable Image Size
-; Timer function for farmville
-; Item Desc on syntable
-; Currency equiv
-
-; fix splash always on top (Problem lies with Vulkan engine) (might be fixed?)
-
-; Done
-; Design and finish the splash...
-; Fix bug where u can minimize and reopen LTSettings
 ;##############################################################################
 ; Init
 ;##############################################################################
@@ -50,7 +35,6 @@ if(A_YYYY . A_MM . A_DD != ini.Load(sectionOthers, "Last_Updated")){
 		SplashTextOn,300,30,, Values updated from poe.ninja! 
 		sleep 1000
 		SplashTextOff
-		;iniSave(user_settings_path, A_YYYY . A_MM . A_DD,sectionOthers, "Last_Updated")
 		ini.Save(scarabDict, sectionScarab)
 	}
 	catch e {
@@ -188,6 +172,7 @@ try{
 		ccounter++
 	}
 	
+	; tag scarab prices
 	GuiControl, Text, %RB4%, % scarabDict["gilded-metamorph-scarab"]
 	GuiControl, Text, %RB9%, % scarabDict["gilded-sulphite-scarab"]
 	GuiControl, Text, %RB14%, % scarabDict["gilded-reliquary-scarab"]
@@ -203,6 +188,7 @@ try{
 	GuiControl, Text, %RB79%, % scarabDict["gilded-legion-scarab"]
 	GuiControl, Text, %RB84%, % scarabDict["gilded-shaper-scarab"]
 	
+	; create hotkey options
 	rcounter := 1
 	for x, y in hotkeyDict{
 		px := xHotkeysOrigin + xHotkeysOffset
@@ -213,6 +199,7 @@ try{
 		rcounter++
 	}
 	
+	; create league options & show GUI
 	px := xHotkeysOrigin + xHotkeysOffset
 	py := yHotkeysOrigin + (rcounter - 1)*yHotkeysOffset
 	Gui, Add, Text, x%xHotkeysOrigin% y%py% w%hotkeyTextWidth% h%hotkeyTextWidth% hwndhotkeyText Right, League :
@@ -234,7 +221,8 @@ Gui, Destroy
 togSet := 0
 return
 
-
+; Submit button
+; Saves all settings into ini file & closes all overlays
 Submit:
 Gui, Submit, NoHide
 for x, y in memDict{
@@ -260,6 +248,7 @@ return
 ; Functions
 ;##############################################################################
 
+; Syndicate overlay toggle
 toggleSyn(memDict, tog)
 {	
 	;Constants
@@ -294,7 +283,7 @@ toggleSyn(memDict, tog)
 	return tog
 }
 
-
+; currency overlay toggle
 toggleCur(dict, tog){
 	xOrigin := 0
 	yOrigin := 155
@@ -345,6 +334,7 @@ PairMembers(mem, arr)
 ; Classes
 ;##############################################################################
 
+; class for loading from/saving into ini file
 class ini{
 	__New(path){
 		this.path := path 
@@ -384,7 +374,7 @@ class ini{
 	}
 }
 
-
+; class for connecting to poe.ninja and retrieving/parsing data
 class update{
 	static url := "https://poe.ninja/api/data/"
 	currency(league){
