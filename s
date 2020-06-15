@@ -160,3 +160,82 @@ Return
 
 GuiClose:
 ExitApp
+
+
+=========================================================================================================================
+LTSettings2:
+GoSub, SetButtons
+Gui, +AlwaysOnTop
+Gui, Add, Picture, x-8 y-1 w1440 h600 , E:\GitHub\LeagueTool\SyndicateTable1.png
+Gui, Add, Radio, x82 y169 w70 h30 hwndRB1 Checked%Ais1% Group vAis , Veild Wep/Acc
+Gui, Add, Radio, x82 y269 w70 h30 hwndRB1 Checked%Ais1%, botRadio
+Gui, Add, Radio, x82 y369 w70 h30 hwndRB1 Checked%Ais1%, Radio
+Gui, Add, Radio, x82 y469 w70 h30 hwndRB1 Checked%Ais1%, Radio
+Gui, Add, Radio, x162 y179 w13 h13 hwndRB1 Checked%Cam1% Group vCam,
+Gui, Add, Radio, x162 y269 w70 h30 hwndRB1 Checked%Cam1% , Radio
+Gui, Add, Radio, x162 y369 w70 h30 hwndRB1 Checked%Cam1% , Radio
+Gui, Add, Radio, x162 y469 w70 h30 hwndRB1 Checked%Cam1% , Radio
+Gui, Add, Radio, x242 y169 w70 h30 hwndRB1 Checked%Elr1% Group vElr , Radio
+Gui, Add, Radio, x242 y269 w70 h30 hwndRB1 Checked%Elr1%, Radio
+Gui, Add, Radio, x242 y369 w70 h30 hwndRB1 Checked%Elr1%, Radio
+Gui, Add, Radio, x242 y469 w70 h30 hwndRB1 Checked%Elr1%, Radio
+Gui, Add, Radio, x322 y169 w70 h30 hwndRB1 Checked%Gra1% Group vGra, Radio
+Gui, Add, Radio, x322 y269 w70 h30 hwndRB1 Checked%Gra1%, Radio
+Gui, Add, Radio, x322 y369 w70 h30 hwndRB1 Checked%Gra1%, Radio
+Gui, Add, Radio, x322 y469 w70 h30 hwndRB1 Checked%Gra1%, Radio
+Gui, Add, Radio, x402 y169 w70 h30 hwndRB1 Checked%Guf1% Group vGuf, Radio
+Gui, Add, Radio, x402 y269 w70 h30 hwndRB1 Checked%Guf1%, Radio
+Gui, Add, Radio, x402 y369 w70 h30 hwndRB1 Checked%Guf1%, Radio
+Gui, Add, Radio, x402 y469 w70 h30 hwndRB1 Checked%Guf1%, Radio
+Gui, Add, Radio, x482 y169 w70 h30 hwndRB1 Checked%Hak1% Group vHak, Radio
+Gui, Add, Radio, x482 y269 w70 h30 hwndRB1 Checked%Hak1%, Radio
+Gui, Add, Radio, x482 y369 w70 h30 hwndRB1 Checked%Hak1%, Radio
+Gui, Add, Radio, x482 y469 w70 h30 hwndRB1 Checked%Hak1%, Radio
+Gui, Add, Radio, x562 y169 w70 h30 hwndRB1 Checked%Hil1% Group vHil, Radio
+Gui, Add, Radio, x562 y269 w70 h30 hwndRB1 Checked%Hil1%, Radio
+Gui, Add, Radio, x562 y369 w70 h30 hwndRB1 Checked%Hil1%, Radio
+Gui, Add, Radio, x562 y469 w70 h30 hwndRB1 Checked%Hil1%, Radio
+Gui, Add, Radio, x642 y169 w70 h30 hwndRB1 Checked%Itt1% Group vItt, Radio
+Gui, Add, Radio, x642 y269 w70 h30 hwndRB1 Checked%Itt1%, Radio
+Gui, Add, Radio, x642 y369 w70 h30 hwndRB1 Checked%Itt1%, Radio
+Gui, Add, Radio, x642 y469 w70 h30 hwndRB1 Checked%Itt1%, Radio
+Gui, Add, Radio, x722 y169 w70 h30 hwndRB1 Checked%Jan1% Group vJan, Radio
+Gui, Add, Radio, x722 y269 w70 h30 hwndRB1 Checked%Jan1%, Radio
+Gui, Add, Radio, x722 y369 w70 h30 hwndRB1 Checked%Jan1%, Radio
+Gui, Add, Radio, x722 y469 w70 h30 hwndRB1 Checked%Jan1%, Radio
+Gui, Add, Radio, x802 y169 w70 h30 hwndRB1 Checked%Jor1% Group vJor, Radio
+Gui, Add, Radio, x802 y269 w70 h30 hwndRB1 Checked%Jor1%, Radio
+Gui, Add, Radio, x802 y369 w70 h30 hwndRB1 Checked%Jor1%, Radio
+Gui, Add, Radio, x802 y469 w70 h30 hwndRB1 Checked%Jor1%, Radio
+Gui, Add, Radio, x882 y169 w70 h30 hwndRB1 Checked%Kor1%, Radio
+Gui, Add, Radio, x882 y269 w70 h30 hwndRB1 , Radio
+Gui, Add, Radio, x882 y369 w70 h30 hwndRB1 , Radio
+Gui, Add, Radio, x882 y469 w70 h30 hwndRB1 , Radio
+Gui, Add, Radio, x962 y169 w70 h30 hwndRB1 , Radio
+Gui, Add, Radio, x962 y269 w70 h30 hwndRB1 , Radio
+Gui, Add, Radio, x962 y369 w70 h30 hwndRB1 , Radio
+Gui, Add, Radio, x962 y469 w70 h30 hwndRB1 , Radio
+Gui, Add, Radio, x1042 y169 w70 h30 hwndRB1 , Radio
+Gui, Add, Radio, x1042 y269 w70 h30 hwndRB1 , Radio
+Gui, Add, Radio, x1042 y369 w70 h30 hwndRB1 , Radio
+Gui, Add, Radio, x1042 y469 w70 h30 hwndRB1 , Radio
+Gui, Add, Radio, x1122 y169 w70 h30 hwndRB1 , Radio
+Gui, Add, Radio, x1122 y269 w70 h30 hwndRB1 , Radio
+Gui, Add, Radio, x1122 y369 w70 h30 hwndRB1 , Radio
+Gui, Add, Radio, x1122 y469 w70 h30 hwndRB1 , Radio
+Gui, Add, Radio, x1202 y169 w70 h30 hwndRB1 , Radio
+Gui, Add, Radio, x1202 y269 w70 h30 hwndRB1 , Radio
+Gui, Add, Radio, x1202 y369 w70 h30 hwndRB1 , Radio
+Gui, Add, Radio, x1202 y469 w70 h30 hwndRB1 , Radio
+Gui, Add, Radio, x1282 y169 w70 h30 hwndRB1 , Radio
+Gui, Add, Radio, x1282 y269 w70 h30 hwndRB1 , Radio
+Gui, Add, Radio, x1282 y369 w70 h30 hwndRB1 , Radio
+Gui, Add, Radio, x1282 y469 w70 h30 hwndRB1 , Radio
+Gui, Add, Radio, x1362 y169 w70 h30 hwndRB1 , Radio
+Gui, Add, Radio, x1362 y269 w70 h30 hwndRB1 , Radio
+Gui, Add, Radio, x1362 y369 w70 h30 hwndRB1 , Radio
+Gui, Add, Radio, x1362 y469 w70 h30 hwndRB1 , Radio
+Gui, Add, Button, x1312 y549 w100 h30 , Button
+; Generated using SmartGUI Creator 4.0
+Gui, Show, x265 y170 h702 w1534 , New GUI Window
+Return
