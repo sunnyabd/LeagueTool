@@ -1,9 +1,9 @@
 ﻿#NoEnv  
 SendMode Input  
 SetWorkingDir %A_ScriptDir%  
-#include Class_CtlColors.ahk
-#include JSON.ahk
-#include Jxon.ahk
+#include scripts\Class_CtlColors.ahk
+#include scripts\JSON.ahk
+#include scripts\Jxon.ahk
 #singleinstance, Force
 ;Todo
 ; remember to set to correct date update code
