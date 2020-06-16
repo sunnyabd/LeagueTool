@@ -123,7 +123,7 @@ clearHeight := 30
 clearY := 584
 ;hotkeys
 xHotkeysOrigin := 1445
-yHotkeysOrigin := 60
+yHotkeysOrigin := 75
 xHotkeysOffset := 100
 yHotkeysOffset := 25
 hotkeyTextWidth := 95
