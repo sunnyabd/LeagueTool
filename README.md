@@ -11,7 +11,7 @@ LeagueTool is an AutoHotkey (AHK) macro that collates the many online resources 
 ## Installation
 1) Make sure you have AHK v1.x downloaded and installed (https://www.autohotkey.com/)
 
-- - Make sure its v1.x and not v.2x. Coded on v1.1.30.03 if script doesnt work try installing it here (https://www.autohotkey.com/download/1.1/)
+- - Make sure its v1.x and not v.2x. Coded on v1.1.30.03. If the script doesnt work try installing it here (https://www.autohotkey.com/download/1.1/)
 
 2) Download the latest LeagueTool script here: https://github.com/sunnyabd/LeagueTool/releases/
 
