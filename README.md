@@ -1,7 +1,7 @@
 # LeagueTool
 Zoom through maps by eliminating minor inconveniences!
 
-LeagueTool is an AutoHotkey (AHK) macro that collates the many online resources available for Path of Exile onto convenient macro buttons.
+LeagueTool is an AutoHotkey (AHK) macro that collates the many online resources available for Path of Exile onto convenient macro buttons and overlays.
 
 ## Features 
 - Chaos orb to Exalted Orb excahnge rate overlay - F5 default - (updated with every refresh)
