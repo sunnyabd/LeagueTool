@@ -18,7 +18,6 @@ sectionCurrency := "Currency"
 sectionScarab := "Scarab"
 user_settings_path := A_ScriptDir . "/user_settings.ini"
 
-
 ; Load Settings
 ini := new ini(user_settings_path)
 MemDict := ini.Load(sectionSyndicate)
@@ -36,17 +35,16 @@ try{
 	sleep 1000
 	SplashTextOff
 	ini.Save(scarabDict, sectionScarab)
-}
-catch e {
+}catch e {
 	SplashTextOn,300,30,, Could not load new values from poe.ninja.
 	sleep 2000
 	SplashTextOff
 }
 
-
 syn := new syndicate(memDict)
 cur := new currency(currencyDict)
 SetTimer, currencyUpdate, 600000
+
 
 SplashTextOn,300,30,, Leaguetools loaded!
 sleep 700
@@ -56,7 +54,6 @@ SplashTextOff
 gosub, loadHotkeys
 
 #Persistent
-ImageOn := 0
 Menu, Tray, Add
 Menu, Tray, Add, Settings, SettingsGUI ;Creates settings tab in tray icon menu
 return
@@ -72,27 +69,29 @@ for x, y in hotkeyDict{
 return
 
 currencyUpdate:
-currencyDict := update.currency(league)
-ini.Save(currencyDict, sectionCurrency)
-togCur := cur.toggler
-cur := new currency(currencyDict)
-if togCur{
+if !cur{
+	cur := new currency(memDict)
+}
+currencyDict := update.currency()
+cur.update(currencyDict)
+return
+
+Currency_Ratio:
+if(WinActive("ahk_exe PathOfExile.exe") or WinActive("ahk_exe PathOfExile_x64.exe")){
+	if !cur{
+		cur := new currency(memDict)
+	}
 	cur.toggle()
 }
 return
 
-Currency_Ratio:
-if !cur{
-	cur := new currency(memDict)
-}
-cur.toggle()
-return
-
 Syndicate_Table:
-if !syn{
-	syn := new syndicate(memDict)
+if(WinActive("ahk_exe PathOfExile.exe") or WinActive("ahk_exe PathOfExile_x64.exe")){
+	if !syn{
+		syn := new syndicate(memDict)
+	}
+	syn.toggle()
 }
-syn.toggle()
 return
 
 Settings:
@@ -269,7 +268,7 @@ return
 ;##############################################################################
 ; Functions
 ;##############################################################################
-	
+
 PairMembers(mem, arr)
 {
 	coun := 1
@@ -306,7 +305,13 @@ class syndicate{
 		yOrigin := this.yOrigin
 		splashStatus := [0,0,0,0]
 		
-		WinGet, windowName, ID, Path of Exile
+		WinGet, windowName, ProcessName, Path of Exile
+		windowName := WinExist("ahk_exe PathOfExile_x64.exe")
+		if (!windowName){
+			windowName := WinExist("ahk_exe PathOfExile.exe")
+		}
+		
+		this.windowName := windowName
 		
 		if (windowName){
 			Gui, Synoverlay:New
@@ -332,14 +337,14 @@ class syndicate{
 	toggle(){
 		xOrigin := this.xOrigin
 		yOrigin := this.yOrigin
+		windowName := this.windowName
 		if this.toggler{
 			Gui, Synoverlay:Hide
 			this.toggler := 0			
 		} else{
-			if(WinActive("Path of Exile")){
-				Gui, Synoverlay:Show, x%xOrigin% y%yOrigin% h600 w1000
-				this.toggler := 1
-			}
+			Gui, Synoverlay:Show, x%xOrigin% y%yOrigin% h600 w1000
+			WinActivate, ahk_id  %windowName%
+			this.toggler := 1
 		}
 		return
 	}
@@ -353,11 +358,14 @@ class currency{
 	imageWidth := 220
 	imageHeight := 120
 	
+	test := 0
+	
 	toggler := 0
 	
 	__New(dict){
 		Gui, Currency:Destroy
 		this.toggler := 0
+		;Text1 := this.Text1
 		
 		imageWidth := this.imageWidth
 		imageHeight := this.imageHeight
@@ -367,17 +375,27 @@ class currency{
 		textWidth := 100
 		textHeight := 40
 		
+		global Text1 := "Text1"
+		global Text2 := "Text2"
+		
 		exSell := dict["exSell"]
 		exBuy := dict["exBuy"]
 		
-		WinGet, windowName, ID, Path of Exile
+		WinGet, windowName, ProcessName, Path of Exile
+		windowName := WinExist("ahk_exe PathOfExile_x64.exe")
+		if (!windowName){
+			windowName := WinExist("ahk_exe PathOfExile.exe")
+		}
+		
+		this.windowName := windowName
+		
 		if(windowName){
 			Gui, Currency:New
 			Gui, Currency: Color, 424242
 			Gui, Currency:Add, Picture, x0 y0 w%imageWidth% h%imageHeight% , %imageDir%\Currency.png
 			Gui, Currency:Font, s13, 
-			Gui, Currency:Add, Text, x%xTextOrigin% y%yTextOrigin%  w%textWidth% h%textHeight% +Center hwndText1 cFFFFFF , %exSell%  :  1 
-			Gui, Currency:Add, Text, x%xTextOrigin% y%yTextOrigin% y+5 w%textWidth% h%textHeight% +Center hwndText2 cFFFFFF, 1  : %exBuy%
+			Gui, Currency:Add, Text, x%xTextOrigin% y%yTextOrigin%  w%textWidth% h%textHeight% +Center vText1 cFFFFFF , %exSell%  :  1 
+			Gui, Currency:Add, Text, x%xTextOrigin% y%yTextOrigin% y+5 w%textWidth% h%textHeight% +Center vText2 cFFFFFF, 1  : %exBuy%
 			Gui, Currency: -Caption +LastFound +ToolWindow +OwnDialogs -Sysmenu
 			Gui, Currency: +Owner%windowName%
 			return this
@@ -385,20 +403,31 @@ class currency{
 		return 0
 	}
 	
+	
 	toggle(){
 		imageWidth := this.imageWidth
 		imageHeight := this.imageHeight
 		xOrigin := this.xOrigin
 		yOrigin := this.yOrigin
+		
+		windowName := this.windowName
+		
 		if this.toggler{
 			Gui, Currency:Hide
 			this.toggler := 0			
 		} else{
-			if(WinActive("Path of Exile")){
-				Gui, Currency:Show, x%xOrigin% y%yOrigin% w%imageWidth% h%imageHeight%
-				this.toggler := 1
-			}
+			Gui, Currency:Show, x%xOrigin% y%yOrigin% w%imageWidth% h%imageHeight%
+			WinActivate, ahk_id %windowName%
+			this.toggler := 1
+			return
 		}
+	}
+	update(dict){
+		exSell := dict["exSell"]
+		exBuy := dict["exBuy"]
+		GuiControl, Currency:Text, Text1, %exSell%  :  1 
+		GuiControl, Currency:Text, Text2, 1  : %exBuy%
+		Gui, Currency:Submit,NoHide
 		return
 	}
 }
@@ -453,38 +482,48 @@ class update{
 	}
 	
 	currency(){
-		url := this.url
-		url .= "currencyoverview?type=Currency"
-		url .= "&league=" . this.league
-		jsonCurrency := this.connect(url)
-		output := {}
-		for x, y in jsonCurrency["lines"]{
-			if (y["detailsId"] = "exalted-orb"){
-				SetFormat,float, 0.2
-				exSell := 1*(1/y["pay"]["value"])
-				exBuy := 1*y["receive"]["value"]
-				output["exSell"] := exSell
-				output["exBuy"] := exBuy
-				return output
+		try{
+			url := this.url
+			url .= "currencyoverview?type=Currency"
+			url .= "&league=" . this.league
+			jsonCurrency := this.connect(url)
+			output := {}
+			for x, y in jsonCurrency["lines"]{
+				if (y["detailsId"] = "exalted-orb"){
+					SetFormat,float, 0.2
+					exSell := 1*(1/y["pay"]["value"])
+					exBuy := 1*y["receive"]["value"]
+					output["exSell"] := exSell
+					output["exBuy"] := exBuy
+					return output
+				}
 			}
+		}catch e{
+			; reserved for log
+			return
 		}
 		return
 	}
 	
 	scarab(){
-		total_scarabs := 14
-		url := this.url
-		url .= "itemoverview?type=Scarab"
-		url .= "&league=" . this.league
-		jsonScarabs := this.connect(url)
-		output := {}
-		for x, y in jsonScarabs["lines"]{
-			if InStr(y["detailsId"], "gilded") {
-				output[y["detailsId"]] := y["chaosValue"]
-			}
-			if (output.Count() > total_scarabs){
-				return output
-			}
+		try{
+			total_scarabs := 14
+			url := this.url
+			url .= "itemoverview?type=Scarab"
+			url .= "&league=" . this.league
+			jsonScarabs := this.connect(url)
+			output := {}
+			for x, y in jsonScarabs["lines"]{
+				if InStr(y["detailsId"], "gilded") {
+					output[y["detailsId"]] := y["chaosValue"]
+				}
+				if (output.Count() > total_scarabs){
+					return output
+				}
+			}	
+		}catch e{
+			; reserved for log
+			return
 		}
 		return output
 	}
