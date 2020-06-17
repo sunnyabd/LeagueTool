@@ -4,9 +4,9 @@ Zoom through maps by eliminating minor inconveniences!
 LeagueTool is an AutoHotkey (AHK) macro that collates the many online resources available for Path of Exile onto convenient macro buttons and overlays.
 
 ## Features 
-- Chaos orb to Exalted Orb excahnge rate overlay - F5 default - (updated with every refresh)
+- Chaos orb to Exalted Orb excahnge rate overlay - F5 default - (updated every 10 minutes)
 - Syndicate preferences overlay - F6 default
-- Scarab price tracking - in settings menu F7 default - (daily updates)
+- Scarab price tracking - in settings menu F7 default - (updates everytime you open)
 
 ## Installation
 1) Make sure you have AHK v1.x downloaded and installed (https://www.autohotkey.com/)
@@ -30,7 +30,7 @@ Hotkeys only work while the Path of Exile window is up.
 
 Default hotkeys:
 
-F5 - Toggles & refreshes Chaos to Exalt exchange rates overlay
+F5 - Chaos to Exalt exchange rates overlay
 
 F6 - Toggles Syndicate preferences overlay
 
